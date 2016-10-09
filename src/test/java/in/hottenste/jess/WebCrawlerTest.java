@@ -1,11 +1,13 @@
 package in.hottenste.jess;
 
 import com.google.common.base.Charsets;
+import com.google.common.collect.Lists;
 import com.google.common.io.Resources;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
@@ -21,7 +23,13 @@ public class WebCrawlerTest {
     public void testCrawlSimple() throws Exception {
         final WebCrawler webCrawler = new WebCrawler();
         Internet internet = Internet.createFromJsonString(loadStringFromResource("simple_internet"));
-        assertThat(webCrawler.crawl(internet).get(0), is("http://foo.bar.com/p1"));
+        final List<String> expected = Lists.newArrayList(
+                "http://foo.bar.com/p1",
+                "http://foo.bar.com/p2",
+                "http://foo.bar.com/p3"
+                );
+
+        assertThat(webCrawler.crawl(internet), is(expected));
     }
 
     //copied from InternetTest - refactor somewhere?
