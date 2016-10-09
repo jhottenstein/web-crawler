@@ -11,38 +11,41 @@ public class WebCrawler {
     }
 
     public CrawlerResults crawl(Internet internet) {
-        final List<String> successes = new LinkedList<>();
-        final Set<String> skipped = new HashSet<>();
-        final Set<String> errors = new HashSet<>();
-
-        final Queue<String> workQueue = new LinkedList<>();
         final Set<String> visited = new HashSet<>();
+        final Queue<String> workQueue = createWorkQueue(internet);
 
-        workQueue.add(getFirstAddress(internet));
+        final CrawlerResults results = new CrawlerResults();
 
         while(!workQueue.isEmpty()) {
             //get address of next page - skip if visited
             final String nextAddress = workQueue.remove();
             if (visited.contains(nextAddress)) {
-                if (!skipped.contains(nextAddress)) {
-                    skipped.add(nextAddress);
-                }
+                results.addSkipped(nextAddress);
             } else {
                 //add current page to successes and visited
                 final Optional<Page> page = internet.findPage(nextAddress);
                 if (page.isPresent()) {
                     final Page nextPage = page.get();
-                    successes.add(nextPage.getAddress());
+                    results.addSuccess(nextPage.getAddress());
                     visited.add(nextPage.getAddress());
 
                     addLinksToWorkQueue(workQueue, nextPage);
                 } else {
-                    errors.add(nextAddress);
+                    results.addError(nextAddress);
                 }
             }
         }
 
-        return new CrawlerResults(successes, skipped, errors);
+        return results;
+    }
+
+    private Queue<String> createWorkQueue(Internet internet) {
+        final Queue<String> workQueue = new LinkedList<>();
+        final List<Page> pages = internet.getPages();
+        if (!pages.isEmpty()) {
+            workQueue.add(pages.get(0).getAddress());
+        }
+        return workQueue;
     }
 
     private void addLinksToWorkQueue(Queue<String> workQueue, Page nextPage) {
@@ -50,8 +53,4 @@ public class WebCrawler {
         Iterables.addAll(workQueue, links);
     }
 
-    private String getFirstAddress(Internet internet) {
-        //TODO protect against empty Pages
-        return internet.getPages().get(0).getAddress();
-    }
 }
