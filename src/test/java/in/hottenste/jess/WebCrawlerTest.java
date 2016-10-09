@@ -29,7 +29,8 @@ public class WebCrawlerTest {
                 "http://foo.bar.com/p3"
                 );
 
-        assertThat(webCrawler.crawl(internet), is(expected));
+        final CrawlerResults crawlerResults = webCrawler.crawl(internet);
+        assertThat(crawlerResults.getSuccesses(), is(expected));
     }
 
     @Test

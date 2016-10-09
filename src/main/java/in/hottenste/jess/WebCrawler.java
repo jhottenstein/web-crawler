@@ -26,18 +26,20 @@ public class WebCrawler {
                 skipped.add(nextAddress);
             } else {
                 //add current page to successes and visited
-                final Page nextPage = internet.findPage(nextAddress);
+                final Page nextPage = internet.findPage(nextAddress).get();
                 successes.add(nextPage.getAddress());
                 visited.add(nextPage.getAddress());
 
-                //get links and add to work queue
-                final List<String> links = nextPage.getLinks();
-                Iterables.addAll(workQueue, links);
+                addLinksToWorkQueue(workQueue, nextPage);
             }
         }
 
-
         return new CrawlerResults(successes, skipped);
+    }
+
+    private void addLinksToWorkQueue(Queue<String> workQueue, Page nextPage) {
+        final List<String> links = nextPage.getLinks();
+        Iterables.addAll(workQueue, links);
     }
 
     private String getFirstAddress(Internet internet) {

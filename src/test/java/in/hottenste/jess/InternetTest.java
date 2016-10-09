@@ -1,6 +1,7 @@
 package in.hottenste.jess;
 
 import com.google.common.base.Charsets;
+import java.util.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Resources;
 import org.junit.Test;
@@ -33,9 +34,18 @@ public class InternetTest {
         final String resourceFile = "internet2";
         String jsonString = loadStringFromResource(resourceFile);
         final Internet internet = Internet.createFromJsonString(jsonString);
-        final Page page = internet.findPage("http://foo.bar.com/p1");
+        final Page page = internet.findPage("http://foo.bar.com/p1").get();
         assertThat(page.getAddress(), is("http://foo.bar.com/p1"));
         assertThat(page.getLinks().get(0), is("http://foo.bar.com/p2"));
+    }
+
+    @Test
+    public void testFindPageError() throws Exception {
+        final String resourceFile = "internet1";
+        String jsonString = loadStringFromResource(resourceFile);
+        final Internet internet = Internet.createFromJsonString(jsonString);
+        final Optional<Page> page = internet.findPage("http://foo.bar.com/p3");
+        assertThat(page.isPresent(), is(false));
     }
 
     private String loadStringFromResource(String resourceFile) throws IOException {

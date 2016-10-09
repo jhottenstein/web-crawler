@@ -1,6 +1,7 @@
 package in.hottenste.jess;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Optional;
 
 import java.io.IOException;
 import java.util.List;
@@ -30,11 +31,11 @@ public class Internet {
         this.pages = pages;
     }
 
-    public Page findPage(String address) {
+    public Optional<Page> findPage(String address) {
         //assuming internet doesn't contain duplicates
         //not a great assumption for a json file, seems fine for the real thing
         return pages.stream()
                 .filter(page -> page.getAddress().equals(address))
-                .findFirst().get();
+                .findFirst();
     }
 }
