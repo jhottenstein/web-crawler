@@ -2,9 +2,7 @@ package in.hottenste.jess;
 
 import com.google.common.collect.Iterables;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class WebCrawler {
     public static void main( String[] args )
@@ -15,19 +13,24 @@ public class WebCrawler {
     public List<String> crawl(Internet internet) {
         final List<String> successes = new LinkedList<>();
         final Queue<String> workQueue = new LinkedList<>();
+        final Set<String> visited = new HashSet<>();
 
         workQueue.add(getFirstAddress(internet));
 
         while(!workQueue.isEmpty()) {
-            //get address of next page
+            //get address of next page - skip if visited
             final String nextAddress = workQueue.remove();
-            final Page nextPage = internet.findPage(nextAddress);
-            //add current page to successes and visited
-            successes.add(nextPage.getAddress());
+            if (!visited.contains(nextAddress)) {
 
-            //get links and add to work queue
-            final List<String> links = nextPage.getLinks();
-            Iterables.addAll(workQueue, links);
+                //add current page to successes and visited
+                final Page nextPage = internet.findPage(nextAddress);
+                successes.add(nextPage.getAddress());
+                visited.add(nextPage.getAddress());
+
+                //get links and add to work queue
+                final List<String> links = nextPage.getLinks();
+                Iterables.addAll(workQueue, links);
+            }
         }
 
 

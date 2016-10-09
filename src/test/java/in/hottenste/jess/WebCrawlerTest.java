@@ -32,6 +32,21 @@ public class WebCrawlerTest {
         assertThat(webCrawler.crawl(internet), is(expected));
     }
 
+    @Test
+    public void testCrawlCyclicGraph() throws Exception {
+        final WebCrawler webCrawler = new WebCrawler();
+        Internet internet = Internet.createFromJsonString(loadStringFromResource("internet2"));
+        final List<String> expected = Lists.newArrayList(
+                "http://foo.bar.com/p1",
+                "http://foo.bar.com/p2",
+                "http://foo.bar.com/p3",
+                "http://foo.bar.com/p4",
+                "http://foo.bar.com/p5"
+        );
+
+        assertThat(webCrawler.crawl(internet), is(expected));
+    }
+
     //copied from InternetTest - refactor somewhere?
     private String loadStringFromResource(String resourceFile) throws IOException {
         URL url = Resources.getResource(resourceFile);
