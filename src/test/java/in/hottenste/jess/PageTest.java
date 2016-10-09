@@ -28,11 +28,9 @@ public class PageTest {
         final String address = "http://foo.bar.com/p1";
         final String firstLink = "http://foo.bar.com/p2";
         String jsonString = createJsonString(address, firstLink);
-        Page page = Page.createPageFromJsonString(jsonString);
+        Page page = Page.createFromJsonString(jsonString);
         assertThat(page.getAddress(), is(address));
         assertThat(page.getLinks().get(0), is(firstLink));
-
-
     }
 
     private String createJsonString(String address, String firstLink) {
