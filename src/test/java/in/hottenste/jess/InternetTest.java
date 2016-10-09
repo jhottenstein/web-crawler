@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.io.Resources;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -21,10 +22,15 @@ public class InternetTest {
 
     @Test
     public void testCreateInternetFromJsonString() throws Exception {
-        URL url = Resources.getResource("internet2");
-        String jsonString = Resources.toString(url, Charsets.UTF_8);
+        final String resourceFile = "internet2";
+        String jsonString = loadStringFromResource(resourceFile);
         final Internet internet = Internet.createFromJsonString(jsonString);
         assertThat(getFirstAddress(internet), is("http://foo.bar.com/p1"));
+    }
+
+    private String loadStringFromResource(String resourceFile) throws IOException {
+        URL url = Resources.getResource(resourceFile);
+        return Resources.toString(url, Charsets.UTF_8);
     }
 
     private String getFirstAddress(Internet internet) {

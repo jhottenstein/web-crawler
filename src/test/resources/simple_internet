@@ -1,0 +1,20 @@
+{
+  "pages": [
+    {
+      "address": "http://foo.bar.com/p1",
+      "links": [
+        "http://foo.bar.com/p2"
+      ]
+    },
+    {
+      "address": "http://foo.bar.com/p2",
+      "links": [
+        "http://foo.bar.com/p3"
+      ]
+    },
+    {
+      "address": "http://foo.bar.com/p3",
+      "links": []
+    }
+  ]
+}

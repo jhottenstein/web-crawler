@@ -1,6 +1,11 @@
 package in.hottenste.jess;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.Resources;
 import org.junit.Test;
+
+import java.io.IOException;
+import java.net.URL;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
@@ -10,5 +15,18 @@ public class WebCrawlerTest {
     public void testSetup() {
         WebCrawler webCrawler = new WebCrawler();
         assertThat(webCrawler, instanceOf(WebCrawler.class));
+    }
+
+    @Test
+    public void testCrawlSimple() throws Exception {
+        final WebCrawler webCrawler = new WebCrawler();
+        Internet internet = Internet.createFromJsonString(loadStringFromResource("simple_internet"));
+        assertThat(webCrawler.crawl(internet).get(0), is("http://foo.bar.com/p1"));
+    }
+
+    //copied from InternetTest - refactor somewhere?
+    private String loadStringFromResource(String resourceFile) throws IOException {
+        URL url = Resources.getResource(resourceFile);
+        return Resources.toString(url, Charsets.UTF_8);
     }
 }
