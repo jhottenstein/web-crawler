@@ -12,7 +12,8 @@ public class WebCrawler {
 
     public CrawlerResults crawl(Internet internet) {
         final List<String> successes = new LinkedList<>();
-        final List<String> skipped = new LinkedList<>();
+        final Set<String> skipped = new HashSet<>();
+        final Set<String> errors = new HashSet<>();
 
         final Queue<String> workQueue = new LinkedList<>();
         final Set<String> visited = new HashSet<>();
@@ -23,18 +24,25 @@ public class WebCrawler {
             //get address of next page - skip if visited
             final String nextAddress = workQueue.remove();
             if (visited.contains(nextAddress)) {
-                skipped.add(nextAddress);
+                if (!skipped.contains(nextAddress)) {
+                    skipped.add(nextAddress);
+                }
             } else {
                 //add current page to successes and visited
-                final Page nextPage = internet.findPage(nextAddress).get();
-                successes.add(nextPage.getAddress());
-                visited.add(nextPage.getAddress());
+                final Optional<Page> page = internet.findPage(nextAddress);
+                if (page.isPresent()) {
+                    final Page nextPage = page.get();
+                    successes.add(nextPage.getAddress());
+                    visited.add(nextPage.getAddress());
 
-                addLinksToWorkQueue(workQueue, nextPage);
+                    addLinksToWorkQueue(workQueue, nextPage);
+                } else {
+                    errors.add(nextAddress);
+                }
             }
         }
 
-        return new CrawlerResults(successes, skipped);
+        return new CrawlerResults(successes, skipped, errors);
     }
 
     private void addLinksToWorkQueue(Queue<String> workQueue, Page nextPage) {
