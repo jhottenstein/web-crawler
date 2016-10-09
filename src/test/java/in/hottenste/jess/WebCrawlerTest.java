@@ -36,16 +36,20 @@ public class WebCrawlerTest {
     public void testCrawlCyclicGraph() throws Exception {
         final WebCrawler webCrawler = new WebCrawler();
         Internet internet = Internet.createFromJsonString(loadStringFromResource("internet2"));
-        final List<String> expected = Lists.newArrayList(
+        final List<String> expectedSuccesses = Lists.newArrayList(
                 "http://foo.bar.com/p1",
                 "http://foo.bar.com/p2",
                 "http://foo.bar.com/p3",
                 "http://foo.bar.com/p4",
                 "http://foo.bar.com/p5"
         );
+        final List<String> expectedSkipped = Lists.newArrayList("http://foo.bar.com/p1");
 
-        assertThat(webCrawler.crawl(internet), is(expected));
+        final CrawlerResults crawlerResults = webCrawler.crawl(internet);
+        assertThat(crawlerResults.getSuccesses(), is(expectedSuccesses));
+        assertThat(crawlerResults.getSkipped(), is(expectedSkipped));
     }
+
 
     //copied from InternetTest - refactor somewhere?
     private String loadStringFromResource(String resourceFile) throws IOException {

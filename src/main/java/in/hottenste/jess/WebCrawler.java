@@ -10,8 +10,10 @@ public class WebCrawler {
         System.out.println( "Hello World!" );
     }
 
-    public List<String> crawl(Internet internet) {
+    public CrawlerResults crawl(Internet internet) {
         final List<String> successes = new LinkedList<>();
+        final List<String> skipped = new LinkedList<>();
+
         final Queue<String> workQueue = new LinkedList<>();
         final Set<String> visited = new HashSet<>();
 
@@ -20,8 +22,9 @@ public class WebCrawler {
         while(!workQueue.isEmpty()) {
             //get address of next page - skip if visited
             final String nextAddress = workQueue.remove();
-            if (!visited.contains(nextAddress)) {
-
+            if (visited.contains(nextAddress)) {
+                skipped.add(nextAddress);
+            } else {
                 //add current page to successes and visited
                 final Page nextPage = internet.findPage(nextAddress);
                 successes.add(nextPage.getAddress());
@@ -34,10 +37,11 @@ public class WebCrawler {
         }
 
 
-        return successes;
+        return new CrawlerResults(successes, skipped);
     }
 
     private String getFirstAddress(Internet internet) {
+        //TODO protect against empty Pages
         return internet.getPages().get(0).getAddress();
     }
 }
