@@ -1,14 +1,15 @@
 package in.hottenste.jess;
 
+import com.google.common.base.Charsets;
 import com.google.common.collect.Iterables;
+import com.google.common.io.Resources;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.*;
 
 public class WebCrawler {
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
-    }
+
 
     public CrawlerResults crawl(Internet internet) {
         final Set<String> visited = new HashSet<>();
@@ -51,6 +52,32 @@ public class WebCrawler {
     private void addLinksToWorkQueue(Queue<String> workQueue, Page nextPage) {
         final List<String> links = nextPage.getLinks();
         Iterables.addAll(workQueue, links);
+    }
+
+    public static void main( String[] args )
+    {
+        final WebCrawler webCrawler = new WebCrawler();
+        String fileNumber = getFileNumber();
+        try {
+            final String jsonString = loadStringFromResource("internet" + fileNumber);
+            final Internet internet = Internet.createFromJsonString(jsonString);
+            final CrawlerResults crawl = webCrawler.crawl(internet);
+            crawl.print(System.out);
+        } catch (IOException e) {
+            System.out.println("That internet wasn't found.");
+        }
+
+    }
+
+    private static String getFileNumber() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Which internet would you like to crawl? (1 or 2): ");
+        return scanner.next();
+    }
+
+    static String loadStringFromResource(String resourceFile) throws IOException {
+        URL url = Resources.getResource(resourceFile);
+        return Resources.toString(url, Charsets.UTF_8);
     }
 
 }

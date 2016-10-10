@@ -1,6 +1,11 @@
 package in.hottenste.jess;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class CrawlerResults {
@@ -9,8 +14,8 @@ public class CrawlerResults {
     private final Set<String> errors;
 
     public CrawlerResults() {
-        successes = new HashSet<>();
-        skipped = new HashSet<>();
+        successes = new LinkedHashSet<>();
+        skipped = new LinkedHashSet<>();
         errors = new HashSet<>();
     }
 
@@ -42,5 +47,22 @@ public class CrawlerResults {
 
     public boolean addError(String nextAddress) {
         return errors.add(nextAddress);
+    }
+
+    public void print(PrintStream out) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            out.println("Success:");
+            out.println(mapper.writeValueAsString(successes));
+            out.println();
+            out.println("Skipped:");
+            out.println(mapper.writeValueAsString(skipped));
+            out.println();
+            out.println("Error:");
+            out.println(mapper.writeValueAsString(errors));
+            out.flush();
+        } catch (IOException e) {
+            out.println("An unknown error occurred");
+        }
     }
 }

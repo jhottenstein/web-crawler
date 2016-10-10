@@ -1,12 +1,8 @@
 package in.hottenste.jess;
 
-import com.google.common.base.Charsets;
 import com.google.common.collect.Sets;
-import com.google.common.io.Resources;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -23,7 +19,7 @@ public class WebCrawlerTest {
     @Test
     public void testCrawlSimple() throws Exception {
         final WebCrawler webCrawler = new WebCrawler();
-        Internet internet = Internet.createFromJsonString(loadStringFromResource("simple_internet"));
+        Internet internet = Internet.createFromJsonString(WebCrawler.loadStringFromResource("simple_internet"));
         final Set<String> expected = Sets.newHashSet(
                 "http://foo.bar.com/p1",
                 "http://foo.bar.com/p2",
@@ -37,7 +33,7 @@ public class WebCrawlerTest {
     @Test
     public void testCrawlCyclicGraph() throws Exception {
         final WebCrawler webCrawler = new WebCrawler();
-        Internet internet = Internet.createFromJsonString(loadStringFromResource("internet2"));
+        Internet internet = Internet.createFromJsonString(WebCrawler.loadStringFromResource("internet2"));
         final Set<String> expectedSuccesses = Sets.newHashSet(
                 "http://foo.bar.com/p1",
                 "http://foo.bar.com/p2",
@@ -56,7 +52,7 @@ public class WebCrawlerTest {
     @Test
     public void testCrawlGraphWithBrokenLinks() throws Exception {
         final WebCrawler webCrawler = new WebCrawler();
-        Internet internet = Internet.createFromJsonString(loadStringFromResource("internet1"));
+        Internet internet = Internet.createFromJsonString(WebCrawler.loadStringFromResource("internet1"));
         final Set<String> expectedSuccesses = Sets.newHashSet(
                 "http://foo.bar.com/p1",
                 "http://foo.bar.com/p2",
@@ -93,8 +89,4 @@ public class WebCrawlerTest {
     }
 
 
-    private String loadStringFromResource(String resourceFile) throws IOException {
-        URL url = Resources.getResource(resourceFile);
-        return Resources.toString(url, Charsets.UTF_8);
-    }
 }
