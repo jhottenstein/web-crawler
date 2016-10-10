@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -12,11 +11,12 @@ public class CrawlerResults {
     private final Set<String> successes;
     private final Set<String> skipped;
     private final Set<String> errors;
+    private final ObjectMapper mapper = new ObjectMapper();
 
     public CrawlerResults() {
         successes = new LinkedHashSet<>();
         skipped = new LinkedHashSet<>();
-        errors = new HashSet<>();
+        errors = new LinkedHashSet<>();
     }
 
     public CrawlerResults(Set<String> successes, Set<String> skipped, Set<String> errors) {
@@ -51,7 +51,6 @@ public class CrawlerResults {
 
     public void print(PrintStream out) {
         try {
-            ObjectMapper mapper = new ObjectMapper();
             out.println("Success:");
             out.println(mapper.writeValueAsString(successes));
             out.println();

@@ -1,17 +1,13 @@
 package in.hottenste.jess;
 
-import com.google.common.base.Charsets;
-import java.util.Optional;
 import com.google.common.collect.ImmutableList;
-import com.google.common.io.Resources;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class InternetTest {
     @Test

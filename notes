@@ -1,0 +1,16 @@
+- This is a single threaded solution to the problem.  I used my allotted time to make the program as well designed
+  and tested as possible.  If I continued working on a parallelized solution, I would have attempted to allow multiple
+  threads to pull from the workQueue.  Working on the real internet, fetching the page and then parsing out new links
+  to process would greatly benefit from multiple threads.
+
+- WebCrawler has a runnable main that crawls the test data.  The WebCrawler tests also use the test data as fixture
+  files.
+
+- Internet#findPage will return the first instance of a given page.  Assuming each page only appears once isn't great
+  for a JSON file but seems fine for the real internet
+
+- I used LinkedHashSets for the result lists (success, skipped, error) because I wanted the output to be stable for
+  ease of verifying my results.  A HashSet would be faster for this program if it needed to be used on larger input.
+
+- WebCrawler#crawl is bigger than I would like but no obvious refactorings stand out to me.  Attempts to extract
+  a method did not help.

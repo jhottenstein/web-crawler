@@ -22,4 +22,45 @@ public class CrawlerResultsTest {
         assertThat(crawlerResults.getErrors(), is(errors));
     }
 
+    @Test
+    public void testAddSuccess() throws Exception {
+        final CrawlerResults crawlerResults = new CrawlerResults();
+        final String success = "Hello";
+        Set<String> successes = Sets.newHashSet(success);
+
+        final boolean isAdded = crawlerResults.addSuccess(success);
+        assertThat(isAdded, is(true));
+        assertThat(crawlerResults.getSuccesses(), is(successes));
+
+        final boolean isAddedAgain = crawlerResults.addSuccess(success);
+        assertThat(isAddedAgain, is(false));
+    }
+
+    @Test
+    public void testAddSkipped() throws Exception {
+        final CrawlerResults crawlerResults = new CrawlerResults();
+        final String skipped = "Hello";
+        Set<String> skippeds = Sets.newHashSet(skipped);
+
+        final boolean isAdded = crawlerResults.addSkipped(skipped);
+        assertThat(isAdded, is(true));
+        assertThat(crawlerResults.getSkipped(), is(skippeds));
+
+        final boolean isAddedAgain = crawlerResults.addSkipped(skipped);
+        assertThat(isAddedAgain, is(false));
+    }
+
+    @Test
+    public void testAddError() throws Exception {
+        final CrawlerResults crawlerResults = new CrawlerResults();
+        final String error = "Hello";
+        Set<String> errors = Sets.newHashSet(error);
+
+        final boolean isAdded = crawlerResults.addError(error);
+        assertThat(isAdded, is(true));
+        assertThat(crawlerResults.getErrors(), is(errors));
+
+        final boolean isAddedAgain = crawlerResults.addError(error);
+        assertThat(isAddedAgain, is(false));
+    }
 }

@@ -23,13 +23,12 @@ public class WebCrawler {
             if (visited.contains(nextAddress)) {
                 results.addSkipped(nextAddress);
             } else {
-                //add current page to successes and visited
+                //add current page to successes and visited if found
                 final Optional<Page> page = internet.findPage(nextAddress);
                 if (page.isPresent()) {
                     final Page nextPage = page.get();
                     results.addSuccess(nextPage.getAddress());
                     visited.add(nextPage.getAddress());
-
                     addLinksToWorkQueue(workQueue, nextPage);
                 } else {
                     results.addError(nextAddress);

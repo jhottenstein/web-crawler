@@ -7,10 +7,10 @@ import java.io.IOException;
 import java.util.List;
 
 public class Internet {
+    private static final ObjectMapper mapper = new ObjectMapper();
     private List<Page> pages;
 
     public static Internet createFromJsonString(String jsonString) throws IOException {
-        final ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(jsonString, Internet.class);
     }
 

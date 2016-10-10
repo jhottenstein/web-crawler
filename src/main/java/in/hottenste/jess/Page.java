@@ -5,12 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 
 public class Page {
+    private static final ObjectMapper mapper = new ObjectMapper();
     private String address;
     private List<String> links;
 
     static Page createFromJsonString(String jsonString) throws java.io.IOException {
-        //is creating a mapper expensive?
-        final ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(jsonString, Page.class);
     }
 
